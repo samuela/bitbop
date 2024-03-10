@@ -1,0 +1,86 @@
+/**
+ * CSS files with the .module.css suffix will be treated as CSS modules
+ * and scoped locally.
+ */
+
+.heroBanner {
+  padding: 8rem 0;
+  text-align: left;
+  position: relative;
+  overflow: hidden;
+}
+
+.buttons {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.heroBanner {
+  background-color: var(--bb-bg-color);
+  --ifm-hero-text-color: var(--ifm-color-primary);
+  text-align: left;
+}
+.heroBanner h1 {
+  font-weight: 600;
+  margin-top: 3rem;
+  font-size: 3.25rem;
+  text-shadow: 1px 1px 100px rgb(255, 0, 255, 0.5);
+}
+.heroSSH {
+  /* display: inline-block; */
+  margin-top: -0.4rem;
+  font-family: var(--ifm-heading-font-family);
+  font-weight: 700;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  border: none;
+}
+.heroSSH span {
+  background-color: #f3ec78;
+  background-image: linear-gradient(180deg, #f3ec78, #af7142);
+  /* background-image: conic-gradient(#f3ec78, #af4261); */
+  -webkit-background-clip: text;
+  -moz-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  -moz-text-fill-color: transparent;
+}
+
+.pricingCardFooter {
+  margin-top: 2rem;
+}
+.pricingCardFooter * {
+  display: block;
+  width: 80%;
+  font-size: 1rem;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+}
+.pricingCardBody ul {
+
+}
+.pricingCardBody .price {
+  opacity: 0.75;
+  /* font-size: 1.5rem; */
+  /* color: red; */
+  font-family: var(--ifm-heading-font-family);
+}
+.priceAmount {
+  font-size: 1.25rem;
+}
+/* .pricingCardFooter .button {
+  display:block;
+  width:100%;
+} */
+
+@media screen and (max-width: 996px) {
+  .heroBanner {
+    padding: 2rem;
+  }
+  .heroBanner h1 {
+    font-size: 2.5rem;
+  }
+  .pricingCard {
+    margin-bottom: 3rem;
+  }
+}
