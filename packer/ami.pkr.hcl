@@ -101,6 +101,14 @@ build {
       "rm ~/miniconda.sh",
       "/opt/miniconda3/bin/conda init --all",
 
+      //// Install uv (fast Python package installer)
+      "curl -LsSf https://astral.sh/uv/install.sh -o uv-install.sh",
+      "echo \"3a1bab070910da4186097de4af36b13a24cd6d467e6d1b984dc0a252c3e572a9 uv-install.sh\" | sha256sum --check",
+      "sh uv-install.sh",
+      "rm uv-install.sh",
+      "echo 'eval \"$(uv generate-shell-completion bash)\"' >> ~/.bashrc",
+      "echo 'eval \"$(uvx --generate-shell-completion bash)\"' >> ~/.bashrc",
+
       //// Install JAX and PyTorch into a conda environment
       "/opt/miniconda3/bin/conda create --name=bitbop",
       "echo 'if [ -d \"/opt/miniconda3/envs/bitbop\" ]; then conda activate bitbop; fi' >> ~/.bashrc",
