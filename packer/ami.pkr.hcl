@@ -103,7 +103,7 @@ build {
 
       //// Install JAX and PyTorch into a conda environment
       "/opt/miniconda3/bin/conda create --name=bitbop",
-      "echo \"conda activate bitbop\" >> ~/.bashrc",
+      "echo 'if [ -d \"/opt/miniconda3/envs/bitbop\" ]; then conda activate bitbop; fi' >> ~/.bashrc",
 
       // Notes:
       //   1. See https://stackoverflow.com/a/75196825 as to why we need to set
