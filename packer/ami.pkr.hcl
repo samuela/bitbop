@@ -10,14 +10,14 @@ packer {
 }
 
 source "amazon-ebs" "ubuntu" {
-  ami_name      = "bitbop-user-ami-ubuntu-22.04-{{timestamp}}"
+  ami_name      = "bitbop-user-ami-ubuntu-24.04-{{timestamp}}"
   instance_type = "m7i-flex.xlarge"
   region        = "us-west-2"
   source_ami_filter {
     filters = {
       // Don't forget to update the NVIDIA driver installation code when
       // changing the Ubuntu version!
-      name                = "ubuntu/images/*ubuntu-jammy-22.04-amd64-server-*"
+      name                = "ubuntu/images/*ubuntu-noble-24.04-amd64-server-*"
       root-device-type    = "ebs"
       virtualization-type = "hvm"
     }
@@ -61,13 +61,13 @@ build {
 
       //// Install NVIDIA driver
       "sudo apt-get install -y linux-headers-$(uname -r)",
-      // Make sure to update "ubuntu2204" to the correct version of Ubuntu when
+      // Make sure to update "ubuntu2404" to the correct version of Ubuntu when
       // updating the base image!
-      "wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2204/x86_64/cuda-keyring_1.0-1_all.deb",
-      "sudo dpkg -i cuda-keyring_1.0-1_all.deb",
+      "wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2404/x86_64/cuda-keyring_1.1-1_all.deb",
+      "sudo dpkg -i cuda-keyring_1.1-1_all.deb",
       "sudo apt-get update",
       "sudo apt-get -y install cuda-drivers",
-      "rm cuda-keyring_1.0-1_all.deb",
+      "rm cuda-keyring_1.1-1_all.deb",
 
       //// Install Nix
       "curl --proto '=https' --tlsv1.2 -sSf -L https://install.determinate.systems/nix | sh -s -- install --no-confirm",
