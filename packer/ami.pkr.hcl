@@ -11,7 +11,7 @@ packer {
 
 source "amazon-ebs" "ubuntu" {
   ami_name      = "bitbop-user-ami-ubuntu-24.04-{{timestamp}}"
-  instance_type = "m7i-flex.xlarge"
+  instance_type = "m7i.xlarge"
   region        = "us-west-2"
   source_ami_filter {
     filters = {
