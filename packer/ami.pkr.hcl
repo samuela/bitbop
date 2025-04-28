@@ -93,14 +93,6 @@ build {
 
       // Can't install home-manager here due to https://discourse.nixos.org/t/nix-channel-update-error-error-cannot-open-connection-to-remote-store-daemon-error-reading-from-file-connection-reset-by-peer/40342.
 
-      //// Install miniconda
-      "sudo mkdir -p /opt/miniconda3",
-      "sudo chown ubuntu /opt/miniconda3/",
-      "wget --quiet https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O ~/miniconda.sh",
-      "bash ~/miniconda.sh -b -u -p /opt/miniconda3/",
-      "rm ~/miniconda.sh",
-      "/opt/miniconda3/bin/conda init --all",
-
       //// Install uv (fast Python package installer)
       "curl -LsSf https://astral.sh/uv/install.sh -o uv-install.sh",
       "echo \"3a1bab070910da4186097de4af36b13a24cd6d467e6d1b984dc0a252c3e572a9 uv-install.sh\" | sha256sum --check",
@@ -109,34 +101,37 @@ build {
       "echo 'eval \"$(uv generate-shell-completion bash)\"' >> ~/.bashrc",
       "echo 'eval \"$(uvx --generate-shell-completion bash)\"' >> ~/.bashrc",
 
-      //// Install JAX and PyTorch into a conda environment
-      "/opt/miniconda3/bin/conda create --name=bitbop",
-      "echo 'if [ -d \"/opt/miniconda3/envs/bitbop\" ]; then conda activate bitbop; fi' >> ~/.bashrc",
-
-      // Notes:
-      //   1. See https://stackoverflow.com/a/75196825 as to why we need to set
-      //      `CONDA_OVERRIDE_CUDA`.
-      //   2. jaxlib currently (2024-01-29) only has wheels for 11.8. Cf https://anaconda.org/conda-forge/jaxlib/files
-      //      for the latest status.
-      //   3. Adding conda-forge::tensorflow=*=*cuda118* results in a conda bug
-      //      (https://github.com/conda/conda/issues/13540).
+      //// Install JAX and PyTorch into a uv environment
       <<-EOF
-      CONDA_OVERRIDE_CUDA="11.8" /opt/miniconda3/bin/conda install --yes --name=bitbop \
-        ipython \
-        jupyter \
-        matplotlib \
-        wandb \
-        conda-forge::jaxlib=*=*cuda118* \
-        conda-forge::jax \
-        fastai::fastai \
-        nvidia::cuda-nvcc=11.8 \
-        pytorch::pytorch \
-        pytorch::torchvision \
-        pytorch::torchaudio \
-        pytorch::pytorch-cuda=11.8
+        sudo mkdir /opt/bitbop-default-venv
+        sudo chown ubuntu /opt/bitbop-default-venv
+        /home/ubuntu/.local/bin/uv venv /opt/bitbop-default-venv
+
+        # As of 2025-04-27, installing pytorch before jax is necessary to avoid:
+        #
+        #   Loaded runtime CuDNN library: 9.7.1 but source was compiled with:
+        #   9.8.0. CuDNN library needs to have matching major version and equal
+        #   or higher minor version. If using a binary install, upgrade your
+        #   CuDNN library.  If building from sources, make sure the library
+        #   loaded at runtime is compatible with the version specified during
+        #   compile configuration.
+        /home/ubuntu/.local/bin/uv --directory=/opt/bitbop-default-venv/ pip install --upgrade \
+          torch \
+          torchvision \
+          torchaudio \
+          --index-url=https://download.pytorch.org/whl/cu128
+        # Include pip package so that users can invoke "pip" directly instead of "uv pip" and have it work as they may
+        # be expecting.
+        /home/ubuntu/.local/bin/uv --directory=/opt/bitbop-default-venv/ pip install --upgrade \
+          ipython \
+          jupyter \
+          matplotlib \
+          pip \
+          wandb \
+          "jax[cuda12]"
       EOF
       ,
-      "/opt/miniconda3/bin/conda clean --all",
+      "echo 'if [ -e \"/opt/bitbop-default-venv/bin/activate\" ]; then source /opt/bitbop-default-venv/bin/activate; fi' >> ~/.bashrc",
 
       //// Set up swap space
       // See https://www.digitalocean.com/community/tutorials/how-to-add-swap-space-on-ubuntu-20-04.
