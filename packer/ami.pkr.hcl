@@ -1,4 +1,4 @@
-// Run with the `bb-build-ami` script in flake.nix.
+// Run with `nix develop -c packer build packer/ami.pkr.hcl`
 
 packer {
   required_plugins {
