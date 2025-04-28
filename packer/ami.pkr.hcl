@@ -93,6 +93,13 @@ build {
 
       // Can't install home-manager here due to https://discourse.nixos.org/t/nix-channel-update-error-error-cannot-open-connection-to-remote-store-daemon-error-reading-from-file-connection-reset-by-peer/40342.
 
+      //// Install Starship (cross-shell prompt)
+      "curl -LsSf https://starship.rs/install.sh -o starship-install.sh",
+      "echo \"56da063be2d93348b6181275b235108ad6dd39bc2c2faee053889f57666ac30a starship-install.sh\" | sha256sum --check",
+      "sudo sh starship-install.sh --yes",
+      "rm starship-install.sh",
+      "echo 'eval \"$(starship init bash)\"' >> ~/.bashrc",
+
       //// Install uv (fast Python package installer)
       "curl -LsSf https://astral.sh/uv/install.sh -o uv-install.sh",
       "echo \"3a1bab070910da4186097de4af36b13a24cd6d467e6d1b984dc0a252c3e572a9 uv-install.sh\" | sha256sum --check",
